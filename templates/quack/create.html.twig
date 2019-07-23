@@ -1,10 +1,14 @@
-{% extends 'base.html.twig' %}
 
 {% block body %}
 
-    <h1>Add new quack ?</h1>
-    {{ form_start(quackForm) }}
-    {{ form_widget(quackForm) }}
-    {{ form_end(quackForm) }}
+    <div class="columns is-mobile is-centered">
+        <div class="column is-half">
+            {{ form_start(quackForm, {'action': path('quack_create'), 'method': 'POST'}) }}
+            <div class="control">
+                {{ form_widget(quackForm) }}
+            </div>
+            {{ form_end(quackForm) }}
+        </div>
+    </div>
 
 {% endblock %}

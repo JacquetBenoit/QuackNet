@@ -12,12 +12,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuackController extends AbstractController
 {
     /**
-     * @Route("/quack", name="quack")
+     * @Route("/", name="quack")
      */
     public function index()
     {
+        $quacks = $this->getDoctrine()
+            ->getRepository(Quack::class)
+            ->findAll();
+
+        if (!$quacks) {
+            throw $this->createNotFoundException(
+                'No quack for this id'
+            );
+        }
+        $form = $this->createForm(QuackForm::class);
+
         return $this->render('quack/index.html.twig', [
-            'controller_name' => 'QuackController',
+            'quacks' => $quacks,
+            'quackForm' => $form->createView()
         ]);
     }
 
@@ -36,7 +48,7 @@ class QuackController extends AbstractController
             );
         }
 
-        return $this->render('quack/index.html.twig', [
+        return $this->render('', [
             'quack' => $quack
     ]);
     }
@@ -56,11 +68,11 @@ class QuackController extends AbstractController
             $quack = new Quack();
             $quack->setContent($data['content']);
             $quack->setCreatedAt($date);
-            dd($quack);
+//            dd($quack);
 
             $em->persist($quack);
             $em->flush();
-            return $this->redirectToRoute('app_homepage');
+            return $this->redirectToRoute('quack');
         }
 
         return $this->render('quack/create.html.twig', [

@@ -1,22 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello QuackController!{% endblock %}
+{% block title %}Welcome to QuackNet!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style></style>
+    {% include 'quack/create.html.twig' %}
+    {% for quack in quacks %}
+        <div class="container margin-card">
 
-<div class="example-wrapper">
-    <h1>Hello ✅</h1>
+        <div class="card column is-offset-one-quarter is-half">
+            <div class="card-content">
+                <div class="media">
+                    <div class="media-left">
+                        <figure class="image is-48x48">
+                            <img src="https://bulma.io/images/placeholders/96x96.png"
+                                 alt="Placeholder image">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <p class="has-text-weight-bold is-size-4">Donald</p>
+                        <p class="subtitle is-6">@Dodo</p>
+                    </div>
+                </div>
 
-    {{ quack.content }}
+                <div class="content is-size-3" style="color: orange">
+                    {{ quack.content }}
+                </div>
+                <div class="content is-size-7">
+                    <time> {{ quack.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
+                </div>
+            </div>
 
-{#    This friendly message is coming from:#}
-{#    <ul>#}
-{#        <li>Your controller at <code><a href="{{ 'C:/Users/benoit.jacquet/Documents/Symfony PHP/QuackNet/src/Controller/QuackController.php'|file_link(0) }}">src/Controller/QuackController.php</a></code></li>#}
-{#        <li>Your template at <code><a href="{{ 'C:/Users/benoit.jacquet/Documents/Symfony PHP/QuackNet/templates/quack/index.html.twig'|file_link(0) }}">templates/quack/index.html.twig</a></code></li>#}
-{#    </ul>#}
-</div>
+        </div>
+    </div>
+    {% endfor %}
 {% endblock %}
