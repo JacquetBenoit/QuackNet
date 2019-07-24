@@ -48,7 +48,7 @@
                                 <div class="media-left">
                                     <figure class="image is-32x32">
                                         {% if comment.author.picture %}
-                                            <img src="{{ quack.author.picture }}"
+                                            <img src="{{ comment.author.picture }}"
                                                  alt="Placeholder image">
                                         {% else %}
                                             <img src="http://icons.iconarchive.com/icons/google/noto-emoji-animals-nature/1024/22276-duck-icon.png"
@@ -71,7 +71,7 @@
                 {% endfor %}
                 <form action="{{ path('quack_create_comment') }}" method="post">
                     <input class="input is-rounded" type="text" placeholder="Comment" name="quack">
-                    <input type="hidden" value="{{ quack.author.id }}" name="parent">
+                    <input type="hidden" value="{{ quack.id }}" name="parent">
                 </form>
             </div>
         </div>
