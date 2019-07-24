@@ -20,11 +20,8 @@ class QuackController extends AbstractController
             ->getRepository(Quack::class)
             ->findAll();
 
-        if (!$quacks) {
-            throw $this->createNotFoundException(
-                'No quack for this id'
-            );
-        }
+        $quacks = array_reverse($quacks);
+
         $form = $this->createForm(QuackForm::class);
 
         return $this->render('quack/index.html.twig', [
@@ -58,18 +55,21 @@ class QuackController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $em)
     {
-        dump($request);
+        //dd($request);
         $form = $this->createForm(QuackForm::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $date = new \DateTime('now', new \DateTimeZone("Europe/Paris"));
             $data = $form->getData();
+            $user = $this->getUser();
             $quack = new Quack();
             $quack->setContent($data['content']);
             $quack->setCreatedAt($date);
-//            dd($quack);
+            $quack->setAuthor($user)->getId();
+            $quack->setParent(0);
 
+//            dd($quack);
             $em->persist($quack);
             $em->flush();
             return $this->redirectToRoute('quack');
@@ -78,6 +78,29 @@ class QuackController extends AbstractController
         return $this->render('quack/create.html.twig', [
             'quackForm' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/create-comment", name="quack_create_comment", methods={"GET", "POST"})
+     */
+    public function createComment(Request $request, EntityManagerInterface $em) {
+        $em = $this->getDoctrine()->getManager();
+
+        $date = new \DateTime('now', new \DateTimeZone("Europe/Paris"));
+        $data = $request->get('quack');
+        $parent = $request->get('parent');
+        $user = $this->getUser();
+        $quack = new Quack();
+
+        $quack->setAuthor($user);
+        $quack->setContent($data);
+        $quack->setCreatedAt($date);
+        $quack->setParent($parent);
+
+        $em->persist($quack);
+        $em->flush();
+
+        return $this->redirectToRoute('quack');
     }
 
     public function update()

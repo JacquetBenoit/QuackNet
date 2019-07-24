@@ -11,7 +11,7 @@
     <body>
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="">
+            <a class="navbar-item" href="{{ path('quack') }}">
                 <img src="https://img.icons8.com/officel/2x/duck.png" width="100%" height="100%">
             </a>
 
@@ -36,10 +36,10 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary">
+                        <a class="button is-primary" href="{{ path('users_new') }}">
                             <strong>Sign up</strong>
                         </a>
-                        <a class="button is-light">
+                        <a class="button is-light" href="{{ path('app_login') }}">
                             Log in
                         </a>
                     </div>

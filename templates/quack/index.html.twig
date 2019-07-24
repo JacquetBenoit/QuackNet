@@ -5,33 +5,75 @@
 {% block body %}
     <style></style>
     {% include 'quack/create.html.twig' %}
-    {% for quack in quacks %}
+    {% for quack in quacks if quack.parent == 0 %}
         <div class="container margin-card">
 
-        <div class="card column is-offset-one-quarter is-half">
-            <div class="card-content">
-                <div class="media">
-                    <div class="media-left">
-                        <figure class="image is-48x48">
-                            <img src="https://bulma.io/images/placeholders/96x96.png"
-                                 alt="Placeholder image">
-                        </figure>
-                    </div>
-                    <div class="media-content">
-                        <p class="has-text-weight-bold is-size-4">Donald</p>
-                        <p class="subtitle is-6">@Dodo</p>
-                    </div>
-                </div>
+            <div class="card column is-offset-one-quarter is-half">
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                                {% if quack.author.picture %}
+                                    <img src="{{ quack.author.picture }}"
+                                         alt="Placeholder image">
+                                {% else %}
+                                    <img src="http://icons.iconarchive.com/icons/google/noto-emoji-animals-nature/1024/22276-duck-icon.png"
+                                         alt="Placeholder image">
+                                {% endif %}
 
-                <div class="content is-size-3" style="color: orange">
-                    {{ quack.content }}
+
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="has-text-weight-bold is-size-4">{{ quack.author.firstname }}</p>
+                            <p class="subtitle is-6">@{{ quack.author.duckname }}</p>
+                        </div>
+                    </div>
+
+                    <div class="content is-size-3" style="color: orange">
+                        {{ quack.content }}
+                    </div>
+                    <div class="content is-size-7">
+                        <time> {{ quack.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
+                    </div>
+                        </div>
+{#                debut commentaire#}
+                {% for comment in quacks %}
+                {% if quack.id == comment.parent %}
+                <div class="container margin-card">
+
+                    <div class="card column is-offset-6 is-three-fifths box" style="padding: 0px">
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-left">
+                                    <figure class="image is-32x32">
+                                        {% if comment.author.picture %}
+                                            <img src="{{ quack.author.picture }}"
+                                                 alt="Placeholder image">
+                                        {% else %}
+                                            <img src="http://icons.iconarchive.com/icons/google/noto-emoji-animals-nature/1024/22276-duck-icon.png"
+                                                 alt="Placeholder image">
+                                        {% endif %}
+                                    </figure>
+                                </div>
+                                <div class="media-content">
+                                    <p class="has-text-weight-bold is-size-5">{{ comment.author.firstname }}</p>
+                                    {{ comment.content }}
+                                </div>
+                            </div>
+                            <div class="content is-size-7">
+                                <time> {{ comment.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="content is-size-7">
-                    <time> {{ quack.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
-                </div>
+                {% endif %}
+                {% endfor %}
+                <form action="{{ path('quack_create_comment') }}" method="post">
+                    <input class="input is-rounded" type="text" placeholder="Comment" name="quack">
+                    <input type="hidden" value="{{ quack.author.id }}" name="parent">
+                </form>
             </div>
-
         </div>
-    </div>
     {% endfor %}
 {% endblock %}
