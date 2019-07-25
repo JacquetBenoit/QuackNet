@@ -39,14 +39,20 @@ class QuackController extends AbstractController
             ->getRepository(Quack::class)
             ->find($id);
 
+        $com = $this->getDoctrine()
+            ->getRepository(Quack::class)
+            ->findAll();
+
         if (!$quack) {
             throw $this->createNotFoundException(
               'No quack for this id'
             );
         }
 
-        return $this->render('', [
-            'quack' => $quack
+        return $this->render('quack/show.html.twig', [
+            'quack' => $quack,
+            'id' => $id,
+            'com' => $com
     ]);
     }
 
@@ -100,7 +106,7 @@ class QuackController extends AbstractController
         $em->persist($quack);
         $em->flush();
 
-        return $this->redirectToRoute('quack');
+        return $this->index();
     }
 
     public function update()
@@ -108,9 +114,32 @@ class QuackController extends AbstractController
 
     }
 
-    public function delete()
+    /**
+     * @Route("/delete", name="quack_delete")
+     */
+    public function delete(Request $request)
     {
+        $id = $request->get('id');
 
+        $quack = $this->getDoctrine()
+            ->getRepository(Quack::class)
+            ->find($id);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($quack);
+        $entityManager->flush();
+
+        return $this->index();
+    }
+
+    /**
+     * @Route("/show-delete", name="quack_show_delete")
+     */
+    public function showDelete(Request $request){
+        $id = $request->get('id');
+        return $this->render('quack/delete.html.twig', [
+            'id' => $id
+        ]);
     }
 
 }

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Delete ?{% endblock %}
+
+{% block body %}
+<p>
+    Are you sure to delete this post ?
+</p>
+    <a href="{{ path('quack_delete', {'id': id}) }}" class="button is-danger">delete</a>
+    <a href="{{ path('quack') }}" class="button">cancel</a>
+
+{% endblock %}

@@ -1,7 +1,12 @@
 .margin-card {
-margin-bottom: 22px;
+    margin-bottom: 22px;
+    margin-top: 1%;
 }
 
 .light-grey {
+    background-color: #f3f3f3;
+}
+
+#html {
     background-color: #f3f3f3;
 }

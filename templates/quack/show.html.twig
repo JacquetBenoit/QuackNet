@@ -4,14 +4,10 @@
 
 {% block body %}
     <style></style>
-    {% if app.user %}
-       <div style="padding-top: 1%;">
-           {% include 'quack/create.html.twig' %}
-       </div>
-    {% endif %}
-    {% for quack in quacks if quack.parent == 0 %}
+    {%if quack.parent == 0 %}
         <div class="container margin-card">
-            <div class="card column is-offset-one-quarter is-half">
+
+            <div class="card column is-offset-one-quarter is-half" style="margin-top: 5%;">
                 <div class="card-content">
                     <div class="media">
                         <div class="media-left">
@@ -23,6 +19,8 @@
                                     <img src="http://icons.iconarchive.com/icons/google/noto-emoji-animals-nature/1024/22276-duck-icon.png"
                                          alt="Placeholder image">
                                 {% endif %}
+
+
                             </figure>
                         </div>
                         <div class="media-content">
@@ -31,16 +29,15 @@
                         </div>
                     </div>
 
-                    <div class="content is-size-3">
-                        <a style="color: orange"
-                           href="{{ path('quack_show', {'id': quack.id}) }}">{{ quack.content }}</a>
+                    <div class="content is-size-3" style="color: orange">
+                        {{ quack.content }}
                     </div>
                     <div class="content is-size-7">
                         <time> {{ quack.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
                     </div>
                 </div>
                 {#                debut commentaire#}
-                {% for comment in quacks %}
+                {% for comment in com %}
                     {% if quack.id == comment.parent %}
                         <div class="container margin-card">
 
@@ -66,32 +63,16 @@
                                     <div class="content is-size-7">
                                         <time> {{ comment.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
                                     </div>
-                                    {% if app.user %}
-                                        {% if comment.author.id == app.user.id %}
-                                            <div style="padding-top: 1%;">
-                                                <a href="" class="far fa-edit" style="color: #00c4a7;"></a>
-                                                <a href="{{ path('quack_show_delete', {'id': comment.id}) }}" class="far fa-trash-alt" style="color: #d30010;"></a>
-                                            </div>
-                                        {% endif %}
-                                   {% endif %}
                                 </div>
                             </div>
                         </div>
                     {% endif %}
                 {% endfor %}
-                {% if app.user %}
-                    <form action="{{ path('quack_create_comment') }}" method="post">
-                        <input class="input is-rounded" type="text" placeholder="Comment" name="quack">
-                        <input type="hidden" value="{{ quack.id }}" name="parent">
-                    </form>
-                    {% if quack.author.id == app.user.id %}
-                        <div style="padding-top: 1%;">
-                            <a href="" class="far fa-edit" style="color: #00c4a7;"></a>
-                            <a href="{{ path('quack_show_delete', {'id': quack.id}) }}" class="far fa-trash-alt" style="color: #d30010;"></a>
-                        </div>
-                    {% endif %}
-                {% endif %}
+                <form action="{{ path('quack_create_comment') }}" method="post">
+                    <input class="input is-rounded" type="text" placeholder="Comment" name="quack">
+                    <input type="hidden" value="{{ quack.id }}" name="parent">
+                </form>
             </div>
         </div>
-    {% endfor %}
+    {% endif %}
 {% endblock %}
