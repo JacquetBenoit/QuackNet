@@ -82,7 +82,7 @@ class QuackController extends AbstractController
             return $this->redirectToRoute('quack');
         }
 
-        return $this->render('quack/create.html.twig', [
+        return $this->render('quack/update.html.twig', [
             'quackForm' => $form->createView()
         ]);
     }
@@ -110,9 +110,37 @@ class QuackController extends AbstractController
         return $this->index();
     }
 
-    public function update()
+    /**
+     * @Route("/update", name="quack_update")
+     */
+    public function update(Request $request)
     {
+        $form = $this->createForm(QuackForm::class);
+        $form->handleRequest($request);
+        $data = $form->getData();
+        $date = new \DateTime('now', new \DateTimeZone("Europe/Paris"));
 
+        $id = $request->get('id');
+        $quack = $this->getDoctrine()
+            ->getRepository(Quack::class)
+            ->find($id);
+
+        //controle des droits de l'utilisateur
+        $this->denyAccessUnlessGranted('edit', $quack);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $quack->setContent($data['content']);
+            $quack->setCreatedAt($date);
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('quack');
+        }
+
+        return $this->render('quack/update.html.twig', [
+            'quackForm' => $form->createView(),
+            'id' => $id
+        ]);
     }
 
     /**

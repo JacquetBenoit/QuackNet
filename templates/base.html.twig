@@ -31,14 +31,17 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary" href="{{ path('users_new') }}">
-                            <strong>Sign up</strong>
-                        </a>
                         {% if app.user %}
+                            <a class="button is-primary" href="{{ path('users_show', {'id': app.user.id}) }}">
+                                <strong>{{ app.user.duckName }}</strong>
+                            </a>
                             <a class="button is-light" href="{{ path('app_logout') }}">
                                 Log out
                             </a>
                             {% else %}
+                                <a class="button is-primary" href="{{ path('users_new') }}">
+                                    <strong>Sign up</strong>
+                                </a>
                                 <a class="button is-light" href="{{ path('app_login') }}">
                                     Log in
                                 </a>

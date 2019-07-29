@@ -40,7 +40,7 @@ class UsersController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('users_index');
+            return $this->redirectToRoute('quack');
         }
 
         return $this->render('users/new.html.twig', [
@@ -50,22 +50,26 @@ class UsersController extends AbstractController
     }
 
     /**
-     * @Route("/users/{id}", name="users_show", methods={"GET"})
+     * @Route("/user/{id}", name="users_show", methods={"GET"})
      */
     public function show(Users $user): Response
     {
+        $this->denyAccessUnlessGranted('user_edit', $user);
+
         return $this->render('users/show.html.twig', [
             'user' => $user,
         ]);
     }
 
     /**
-     * @Route("/users/{id}/edit", name="users_edit", methods={"GET","POST"})
+     * @Route("/user/{id}/edit", name="users_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Users $user): Response
     {
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
+
+        $this->denyAccessUnlessGranted('user_edit', $user);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();

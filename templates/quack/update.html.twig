@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="columns is-mobile is-centered">
+        <div class="column is-half">
+            {{ form_start(quackForm, {'action': path('quack_update', {'id': id}), 'method': 'POST'}) }}
+            <div class="control">
+                {{ form_widget(quackForm.content, {'attr': {'placeholder': 'Edit your post'}}) }}
+            </div>
+            {{ form_end(quackForm) }}
+        </div>
+    </div>
+
+{% endblock %}
