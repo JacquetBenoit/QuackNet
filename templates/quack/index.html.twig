@@ -67,7 +67,7 @@
                                         <time> {{ comment.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
                                     </div>
                                     {% if app.user %}
-                                        {% if comment.author.id == app.user.id %}
+                                        {% if is_granted('ROLE_ADMIN') or comment.author.id == app.user.id %}
                                             <div style="padding-top: 1%;">
                                                 <a href="" class="far fa-edit" style="color: #00c4a7;"></a>
                                                 <a href="{{ path('quack_show_delete', {'id': comment.id}) }}" class="far fa-trash-alt" style="color: #d30010;"></a>
@@ -84,7 +84,7 @@
                         <input class="input is-rounded" type="text" placeholder="Comment" name="quack">
                         <input type="hidden" value="{{ quack.id }}" name="parent">
                     </form>
-                    {% if quack.author.id == app.user.id %}
+                    {% if is_granted('ROLE_ADMIN') or quack.author.id == app.user.id %}
                         <div style="padding-top: 1%;">
                             <a href="" class="far fa-edit" style="color: #00c4a7;"></a>
                             <a href="{{ path('quack_show_delete', {'id': quack.id}) }}" class="far fa-trash-alt" style="color: #d30010;"></a>

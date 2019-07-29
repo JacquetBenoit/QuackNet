@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Quack;
 use App\Form\QuackForm;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -124,6 +125,9 @@ class QuackController extends AbstractController
         $quack = $this->getDoctrine()
             ->getRepository(Quack::class)
             ->find($id);
+
+        //controle des droits de l'utilisateur
+        $this->denyAccessUnlessGranted('edit', $quack);
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($quack);
