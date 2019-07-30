@@ -27,7 +27,7 @@ class UsersController extends AbstractController
     /**
      * @Route("/new", name="users_new", methods={"GET","POST"})
      */
-    public function new(Request $request, UserPasswordEncoderInterface $encoder): Response
+    public function new(Request $request, \Swift_Mailer $mailer): Response
     {
         $user = new Users();
         $form = $this->createForm(UsersType::class, $user);
@@ -39,6 +39,18 @@ class UsersController extends AbstractController
 //            $user->setPassword($encoded);
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $message = (new \Swift_Message('Hello Email'))
+                ->setFrom('benrard.du.campus@gmail.com')
+                ->setTo('benrard.du.campus@gmail.com')
+                ->setBody(
+                    $this->renderView(
+                        'mail/registration.html.twig',
+                        ['name' => $user->getName()]
+                    )
+                )
+            ;
+            $mailer->send($message);
 
             return $this->redirectToRoute('quack');
         }

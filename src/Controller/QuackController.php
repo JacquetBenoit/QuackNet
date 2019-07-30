@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Quack;
+use App\Entity\Users;
 use App\Form\QuackForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -19,7 +20,7 @@ class QuackController extends AbstractController
     {
         $quacks = $this->getDoctrine()
             ->getRepository(Quack::class)
-            ->findAll();
+            -> findAllWithRelation();
 
         $quacks = array_reverse($quacks);
 

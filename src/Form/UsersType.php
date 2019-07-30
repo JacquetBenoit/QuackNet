@@ -32,7 +32,8 @@ class UsersType extends AbstractType
                 'attr' => ['class' => 'input', 'placeholder' => 'password']
             ])
             ->add('picture', TextType::class, [
-                'attr' => ['class' => 'input', 'placeholder' => 'picture']
+                'attr' => ['class' => 'input', 'placeholder' => 'picture'],
+                'required' => 'false'
             ])
         ;
     }
