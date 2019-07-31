@@ -10,3 +10,13 @@
 #html {
     background-color: #f3f3f3;
 }
+
+.fixed {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+}
+
+.nine-px-padding-top {
+    padding-top: 9px;
+}
