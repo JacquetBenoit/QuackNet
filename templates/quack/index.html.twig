@@ -5,19 +5,19 @@
 {% block body %}
     <style></style>
     {% if app.user %}
-       <div style="padding-top: 65px;">
-           {% include 'quack/create.html.twig' %}
-       </div>
+        <div style="padding-top: 65px;">
+            {% include 'quack/create.html.twig' %}
+        </div>
     {% endif %}
     {% for quack in quacks if quack.parent == 0 %}
         <div class="container margin-card">
             <div class="card column is-offset-one-quarter is-half">
                 {% if quack.picture %}
-                <div class="card-image">
-                    <figure class="image is-3by2">
-                        <img src="{{ asset('uploads/' ~ quack.picture) }}" alt="Placeholder image">
-                    </figure>
-                </div>
+                    <div class="card-image">
+                        <figure class="image is-3by2">
+                            <img src="{{ asset('uploads/' ~ quack.picture) }}" alt="Placeholder image">
+                        </figure>
+                    </div>
                 {% endif %}
                 <div class="card-content">
                     <div class="media">
@@ -76,11 +76,13 @@
                                     {% if app.user %}
                                         {% if is_granted('ROLE_MODERATOR') or comment.author.id == app.user.id %}
                                             <div style="padding-top: 1%;">
-                                                <a href="{{ path('quack_update', {'id': comment.id}) }}" class="far fa-edit" style="color: #00c4a7;"></a>
-                                                <a href="{{ path('quack_show_delete', {'id': comment.id}) }}" class="far fa-trash-alt" style="color: #d30010;"></a>
+                                                <a href="{{ path('quack_update', {'id': comment.id}) }}"
+                                                   class="far fa-edit" style="color: #00c4a7;"></a>
+                                                <a href="{{ path('quack_show_delete', {'id': comment.id}) }}"
+                                                   class="far fa-trash-alt" style="color: #d30010;"></a>
                                             </div>
                                         {% endif %}
-                                   {% endif %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -93,8 +95,10 @@
                     </form>
                     {% if is_granted('ROLE_MODERATOR') or quack.author.id == app.user.id %}
                         <div style="padding-top: 1%;">
-                            <a href="{{ path('quack_update', {'id': quack.id}) }}" class="far fa-edit" style="color: #00c4a7;"></a>
-                            <a href="{{ path('quack_show_delete', {'id': quack.id}) }}" class="far fa-trash-alt" style="color: #d30010;"></a>
+                            <a href="{{ path('quack_update', {'id': quack.id}) }}" class="far fa-edit"
+                               style="color: #00c4a7;"></a>
+                            <a href="{{ path('quack_show_delete', {'id': quack.id}) }}" class="far fa-trash-alt"
+                               style="color: #d30010;"></a>
                         </div>
                     {% endif %}
                 {% endif %}

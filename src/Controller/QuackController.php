@@ -215,20 +215,30 @@ class QuackController extends AbstractController
         ]);
     }
 
-    public function tempUpload(Request $request)
+    /**
+     * @Route("/search", name="quack_search")
+     */
+    public function search(Request $request, EntityManagerInterface $em)
     {
-        /** @var UploadedFile $uploadFile */
-        $uploadFile = $request->Files->get('image');
-        $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
+        $data = $request->get('search');
 
-        $originalFilename = pathinfo($uploadFile->getClientOriginalName(), PATHINFO_FILENAME);
-        $newFilename = $originalFilename.'-'.uniqid().'.'.$uploadFile->guessExtension();
+        $query = $this->getDoctrine()
+            ->getRepository(Quack::class)
+            ->createQueryBuilder('q')
+            ->Join('q.author', 'u')
+            ->addSelect('u')
+            ->where('u.duckname LIKE :data')
+            ->setParameter('data', $data)
+            ->getQuery();
 
-        dd($uploadFile->move(
-            $destination,
-            $newFilename
-        ));
+        $result = $query->getResult();
+
+//        dd($result);
+
+        return $this->render('quack/searchResult.html.twig', [
+           'quacks' => $result
+        ]);
+
     }
-
 
 }

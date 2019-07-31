@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <style></style>
+    <div style="padding-top: 50px;">
+        {% for quack in quacks if quack.parent == 0 %}
+            <div class="container margin-card">
+                <div class="card column is-offset-one-quarter is-half">
+                    {% if quack.picture %}
+                        <div class="card-image">
+                            <figure class="image is-3by2">
+                                <img src="{{ asset('uploads/' ~ quack.picture) }}" alt="Placeholder image">
+                            </figure>
+                        </div>
+                    {% endif %}
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                    {% if quack.author.picture %}
+                                        <img src="{{ quack.author.picture }}"
+                                             alt="Placeholder image">
+                                    {% else %}
+                                        <img src="http://icons.iconarchive.com/icons/google/noto-emoji-animals-nature/1024/22276-duck-icon.png"
+                                             alt="Placeholder image">
+                                    {% endif %}
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="has-text-weight-bold is-size-4">{{ quack.author.firstname }}</p>
+                                <p class="subtitle is-6">@{{ quack.author.duckname }}</p>
+                            </div>
+                        </div>
+
+                        <div class="content is-size-3">
+                            <a style="color: orange"
+                               href="{{ path('quack_show', {'id': quack.id}) }}">{{ quack.content }}</a>
+                        </div>
+                        <div class="content is-size-7">
+                            <time> {{ quack.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
+                        </div>
+                    </div>
+                    {#                debut commentaire#}
+                    {% for comment in quacks %}
+                        {% if quack.id == comment.parent %}
+                            <div class="container margin-card">
+
+                                <div class="card column is-offset-6 is-three-fifths box" style="padding: 0px">
+                                    <div class="card-content">
+                                        <div class="media">
+                                            <div class="media-left">
+                                                <figure class="image is-32x32">
+                                                    {% if comment.author.picture %}
+                                                        <img src="{{ comment.author.picture }}"
+                                                             alt="Placeholder image">
+                                                    {% else %}
+                                                        <img src="http://icons.iconarchive.com/icons/google/noto-emoji-animals-nature/1024/22276-duck-icon.png"
+                                                             alt="Placeholder image">
+                                                    {% endif %}
+                                                </figure>
+                                            </div>
+                                            <div class="media-content">
+                                                <p class="has-text-weight-bold is-size-5">{{ comment.author.firstname }}</p>
+                                                {{ comment.content }}
+                                            </div>
+                                        </div>
+                                        <div class="content is-size-7">
+                                            <time> {{ comment.getCreatedAt()|date('d/m/Y - H:i:s') }} </time>
+                                        </div>
+                                        {% if app.user %}
+                                            {% if is_granted('ROLE_MODERATOR') or comment.author.id == app.user.id %}
+                                                <div style="padding-top: 1%;">
+                                                    <a href="{{ path('quack_update', {'id': comment.id}) }}"
+                                                       class="far fa-edit" style="color: #00c4a7;"></a>
+                                                    <a href="{{ path('quack_show_delete', {'id': comment.id}) }}"
+                                                       class="far fa-trash-alt" style="color: #d30010;"></a>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% if app.user %}
+                        <form action="{{ path('quack_create_comment') }}" method="post">
+                            <input class="input is-rounded" type="text" placeholder="Comment" name="quack">
+                            <input type="hidden" value="{{ quack.id }}" name="parent">
+                        </form>
+                        {% if is_granted('ROLE_MODERATOR') or quack.author.id == app.user.id %}
+                            <div style="padding-top: 1%;">
+                                <a href="{{ path('quack_update', {'id': quack.id}) }}" class="far fa-edit"
+                                   style="color: #00c4a7;"></a>
+                                <a href="{{ path('quack_show_delete', {'id': quack.id}) }}" class="far fa-trash-alt"
+                                   style="color: #d30010;"></a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
