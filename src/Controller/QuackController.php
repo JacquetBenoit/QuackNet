@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class QuackController extends AbstractController
 {
@@ -20,7 +21,7 @@ class QuackController extends AbstractController
     {
         $quacks = $this->getDoctrine()
             ->getRepository(Quack::class)
-            -> findAllWithRelation();
+            ->findAllWithRelation();
 
         $quacks = array_reverse($quacks);
 
@@ -47,7 +48,7 @@ class QuackController extends AbstractController
 
         if (!$quack) {
             throw $this->createNotFoundException(
-              'No quack for this id'
+                'No quack for this id'
             );
         }
 
@@ -55,7 +56,7 @@ class QuackController extends AbstractController
             'quack' => $quack,
             'id' => $id,
             'com' => $com
-    ]);
+        ]);
     }
 
     /**
@@ -67,11 +68,30 @@ class QuackController extends AbstractController
         $form = $this->createForm(QuackForm::class);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form['pictureFile']->getData();
+
+            if ($uploadedFile) {
+
+                $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
+
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+
+                $uploadedFile->move(
+                    $destination,
+                    $newFilename
+                );
+            }
+
             $date = new \DateTime('now', new \DateTimeZone("Europe/Paris"));
             $data = $form->getData();
             $user = $this->getUser();
+
             $quack = new Quack();
+            $quack->setPicture($newFilename);
             $quack->setContent($data['content']);
             $quack->setCreatedAt($date);
             $quack->setAuthor($user)->getId();
@@ -91,7 +111,8 @@ class QuackController extends AbstractController
     /**
      * @Route("/create-comment", name="quack_create_comment", methods={"GET", "POST"})
      */
-    public function createComment(Request $request, EntityManagerInterface $em) {
+    public function createComment(Request $request, EntityManagerInterface $em)
+    {
         $em = $this->getDoctrine()->getManager();
 
         $date = new \DateTime('now', new \DateTimeZone("Europe/Paris"));
@@ -130,8 +151,26 @@ class QuackController extends AbstractController
         $this->denyAccessUnlessGranted('edit', $quack);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+
+            /** @var UploadedFile $uploadedFile */
+            $uploadedFile = $form['pictureFile']->getData();
+
+            if ($uploadedFile) {
+
+                $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
+
+                $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = $originalFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+
+                $uploadedFile->move(
+                    $destination,
+                    $newFilename
+                );
+            }
             $quack->setContent($data['content']);
             $quack->setCreatedAt($date);
+            $quack->setPicture($newFilename);
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -168,11 +207,28 @@ class QuackController extends AbstractController
     /**
      * @Route("/show-delete", name="quack_show_delete")
      */
-    public function showDelete(Request $request){
+    public function showDelete(Request $request)
+    {
         $id = $request->get('id');
         return $this->render('quack/delete.html.twig', [
             'id' => $id
         ]);
     }
+
+    public function tempUpload(Request $request)
+    {
+        /** @var UploadedFile $uploadFile */
+        $uploadFile = $request->Files->get('image');
+        $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
+
+        $originalFilename = pathinfo($uploadFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $newFilename = $originalFilename.'-'.uniqid().'.'.$uploadFile->guessExtension();
+
+        dd($uploadFile->move(
+            $destination,
+            $newFilename
+        ));
+    }
+
 
 }

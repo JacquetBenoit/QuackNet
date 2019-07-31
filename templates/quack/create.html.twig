@@ -1,11 +1,28 @@
-
 {% block body %}
 
     <div class="columns is-mobile is-centered">
         <div class="column is-half">
             {{ form_start(quackForm, {'action': path('quack_create'), 'method': 'POST'}) }}
             <div class="control">
-                {{ form_widget(quackForm) }}
+                {{ form_widget(quackForm.content) }}
+                <div class="field columns is-centered">
+                    <div class="file has-name column is-one-quarter">
+                        <label class="file-label">
+                            {{ form_widget(quackForm.pictureFile) }}
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Upload picture file
+                                </span>
+                             </span>
+                        </label>
+                    </div>
+                    <div class="column is-3 ">
+                        {{ form_widget(quackForm.save) }}
+                    </div>
+                </div>
             </div>
             {{ form_end(quackForm) }}
         </div>

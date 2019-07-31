@@ -33,7 +33,7 @@ class UsersType extends AbstractType
             ])
             ->add('picture', TextType::class, [
                 'attr' => ['class' => 'input', 'placeholder' => 'picture'],
-                'required' => 'false'
+                'required' => false
             ])
         ;
     }

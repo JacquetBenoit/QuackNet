@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,6 +15,11 @@ class QuackForm extends AbstractType
             ->add('content', TextareaType::class, [
                 'label' => false,
                 'attr' => ['class' => 'textarea', 'placeholder' => 'Post a new Quack'],
+            ])
+            ->add('pictureFile', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['class' => 'file-input']
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Post',

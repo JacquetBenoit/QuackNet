@@ -12,6 +12,13 @@
     {% for quack in quacks if quack.parent == 0 %}
         <div class="container margin-card">
             <div class="card column is-offset-one-quarter is-half">
+                {% if quack.picture %}
+                <div class="card-image">
+                    <figure class="image is-3by2">
+                        <img src="{{ asset('uploads/' ~ quack.picture) }}" alt="Placeholder image">
+                    </figure>
+                </div>
+                {% endif %}
                 <div class="card-content">
                     <div class="media">
                         <div class="media-left">
