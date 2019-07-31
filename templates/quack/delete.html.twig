@@ -3,10 +3,11 @@
 {% block title %}Delete ?{% endblock %}
 
 {% block body %}
-<p>
+<div class="padding-menu">
+    <p>
     Are you sure to delete this post ?
-</p>
+    </p>
     <a href="{{ path('quack_delete', {'id': id}) }}" class="button is-danger">delete</a>
     <a href="{{ path('quack') }}" class="button">cancel</a>
-
+</div>
 {% endblock %}

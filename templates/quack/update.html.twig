@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
+<div class="padding-menu">
     <div class="columns is-mobile is-centered">
         <div class="column is-half">
             {{ form_start(quackForm, {'action': path('quack_update', {'id': id}), 'method': 'POST'}) }}
@@ -29,5 +29,5 @@
             {{ form_end(quackForm) }}
         </div>
     </div>
-
+</div>
 {% endblock %}

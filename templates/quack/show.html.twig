@@ -5,6 +5,7 @@
 {% block body %}
     <style></style>
     {%if quack.parent == 0 %}
+        <div class="padding-menu">
         <div class="container margin-card">
 
             <div class="card column is-offset-one-quarter is-half" style="margin-top: 5%;">
@@ -73,6 +74,7 @@
                     <input type="hidden" value="{{ quack.id }}" name="parent">
                 </form>
             </div>
+        </div>
         </div>
     {% endif %}
 {% endblock %}
