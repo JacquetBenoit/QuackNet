@@ -5,10 +5,11 @@
 {% block body %}
     <style></style>
     {% if app.user %}
-        <div style="padding-top: 65px;">
+        <div class="padding-menu">
             {% include 'quack/create.html.twig' %}
         </div>
     {% endif %}
+    <div class="padding-menu">
     {% for quack in quacks if quack.parent == 0 %}
         <div class="container margin-card">
             <div class="card column is-offset-one-quarter is-half">
@@ -105,4 +106,5 @@
             </div>
         </div>
     {% endfor %}
+    </div>
 {% endblock %}
