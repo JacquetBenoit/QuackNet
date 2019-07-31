@@ -41,8 +41,8 @@ class UsersController extends AbstractController
             $entityManager->flush();
 
             $message = (new \Swift_Message('Hello Email'))
-                ->setFrom('benrard.du.campus@gmail.com')
-                ->setTo('benrard.du.campus@gmail.com')
+                ->setFrom('test@mail.com')
+                ->setTo('test@mail.com')
                 ->setBody(
                     $this->renderView(
                         'mail/registration.html.twig',
